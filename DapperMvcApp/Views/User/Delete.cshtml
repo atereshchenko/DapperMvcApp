@@ -1,0 +1,25 @@
+﻿@model DapperMvcApp.Models.User
+@{
+    ViewData["Title"] = "Удаление пользователя";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewBag.Title</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Имя</dt>
+        <dd>
+            @Model.Name
+        </dd>
+        <dt>Возраст</dt>
+        <dd>
+            @Model.Age
+        </dd>
+    </dl>
+    <div>
+        <form asp-controller="User" asp-action="Delete" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-default" value="Удалить" />
+            </div>
+        </form>
+    </div>
+</div>

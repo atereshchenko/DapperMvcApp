@@ -1,0 +1,30 @@
+﻿@model IEnumerable<DapperMvcApp.Models.User>
+@{
+    ViewData["Title"] = "Список пользователей";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-controller="User" asp-action="Create">Добавить</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Имя</th>
+        <th>Возраст</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Age</td>
+            <td>
+                <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+    }
+</table>

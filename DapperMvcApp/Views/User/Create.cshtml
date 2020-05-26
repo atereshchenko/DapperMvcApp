@@ -1,0 +1,25 @@
+﻿@model DapperMvcApp.Models.User
+@{
+    ViewData["Title"] = "Новый пользователь";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewData["Title"]</h2>
+<form asp-action="Create" asp-controller="User">
+    <div>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control form-control-sm" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Age"></label>
+            <input asp-for="Age" class="form-control  form-control-sm" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-controller="User" asp-action="Index">Вернуться к списку</a>
+</div>
