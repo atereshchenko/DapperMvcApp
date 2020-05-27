@@ -1,0 +1,15 @@
+﻿@model DapperMvcApp.Models.User
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Пользователь @Model.Name</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Идентификатор</dt>
+        <dd>@Model.Id</dd>
+        <dt>Возраст</dt>
+        <dd>@Model.Age</dd>
+    </dl>
+</div>

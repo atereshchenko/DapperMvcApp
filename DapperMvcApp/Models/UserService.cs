@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DapperMvcApp.Models
 {
     public interface IUserRepository
-    {
-        void Create(User user);
-        void Delete(int id);
-        User Get(int id);
-        List<User> GetUsers();
-        void Update(User user);
+    {   
+        Task<User> GetUser(int id);        
+        Task<IEnumerable<User>> GetUsers();        
+        Task<User> Create(User user);
+        Task<User> Update(User user);
+        Task<User> Delete(User user);
     }
 
     public class UserRepository : IUserRepository
@@ -22,24 +23,43 @@ namespace DapperMvcApp.Models
         {
             connectionString = conn;
         }
-
-        public List<User> GetUsers()
+        public async Task<User> GetUser(int id)
         {
-            using (IDbConnection db = new SqlConnection(connectionString))
-            {
-                return db.Query<User>("SELECT * FROM Users").ToList();
-            }
+            var user = await Task.Run(() => GetUserId(id));
+            return user;
         }
-
-        public User Get(int id)
+        public async Task<IEnumerable<User>> GetUsers()
+        {
+            return await Task.Run(() => GetListUsers());
+        }
+        public async Task<User> Create(User user)
+        {
+            return await Task.Run(() => CreateUser(user));
+        }
+        public async Task<User> Update(User user)
+        {
+            return await Task.Run(() => UpdateUser(user));
+        }
+        public async Task<User> Delete(User user)
+        {
+            return await Task.Run(() => DeleteUser(user));
+        }
+        
+        private User GetUserId(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<User>("SELECT * FROM Users WHERE Id = @id", new { id }).FirstOrDefault();
             }
-        }
-
-        public void Create(User user)
+        }        
+        private List<User> GetListUsers()
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<User>("SELECT * FROM Users").ToList();
+            }
+        }        
+        private User CreateUser(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
@@ -50,25 +70,26 @@ namespace DapperMvcApp.Models
                 var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age); SELECT CAST(SCOPE_IDENTITY() as int)";
                 int? userId = db.Query<int>(sqlQuery, user).FirstOrDefault();
                 user.Id = userId.Value;
+                return user;
             }
         }
-
-        public void Update(User user)
+        private User UpdateUser(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 var sqlQuery = "UPDATE Users SET Name = @Name, Age = @Age WHERE Id = @Id";
-                db.Execute(sqlQuery, user);
+                db.Execute(sqlQuery, user);                
             }
+            return user;
         }
-
-        public void Delete(int id)
+        private User DeleteUser(User user)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Users WHERE Id = @id";
-                db.Execute(sqlQuery, new { id });
+                var sqlQuery = "DELETE FROM Users WHERE Id = @Id";
+                db.Execute(sqlQuery, new { user.Id });
             }
+            return user;
         }
     }
 }
