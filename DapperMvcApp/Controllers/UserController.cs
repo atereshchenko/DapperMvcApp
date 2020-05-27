@@ -9,66 +9,67 @@ namespace DapperMvcApp.Controllers
 {
     public class UserController : Controller
     {
-        IUserRepository repo;
+        readonly IUserRepository repos;
         public UserController(IUserRepository r)
         {
-            repo = r;
+            repos = r;
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(repo.GetUsers());
+            return View(await repos.GetUsers());
         }
 
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            User user = repo.Get(id);
+            User user = await repos.GetUser(id);
             if (user != null)
                 return View(user);
             return NotFound();
         }
 
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(User user)
+        public async Task<IActionResult> Create(User user)
         {
-            repo.Create(user);
+            await repos.Create(user);
             return RedirectToAction("Index");
         }
 
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            User user = repo.Get(id);
+            User user = await repos.GetUser(id);
             if (user != null)
                 return View(user);
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult Edit(User user)
+        public async Task<IActionResult> Edit(User user)
         {
-            repo.Update(user);
+            await repos.Update(user);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(int id)
+        public async Task<IActionResult> ConfirmDelete(int id)
         {
-            User user = repo.Get(id);
+            User user = await repos.GetUser(id);
             if (user != null)
                 return View(user);
             return NotFound();
         }
 
         [HttpPost]
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            repo.Delete(id);
+            User user = await repos.GetUser(id);
+            await repos.Delete(user);
             return RedirectToAction("Index");
         }
     }
