@@ -1,0 +1,21 @@
+﻿@model DapperMvcApp.Models.Entities.AccessType
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>AccessType @Model.Title</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Id</dt>
+        <dd>@Model.Id</dd>
+        <dt>Read</dt>
+        <dd>@Model.Read</dd>
+        <dt>Write</dt>
+        <dd>@Model.Write</dd>
+        <dt>Read</dt>
+        <dd>@Model.Read</dd>
+        <dt>Delete</dt>
+        <dd>@Model.Delete</dd>
+    </dl>
+</div>

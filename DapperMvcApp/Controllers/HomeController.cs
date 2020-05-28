@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DapperMvcApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DapperMvcApp.Controllers
 {
@@ -18,11 +19,13 @@ namespace DapperMvcApp.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

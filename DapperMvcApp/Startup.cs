@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DapperMvcApp.Models;
+using DapperMvcApp.Models.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace DapperMvcApp
 {
@@ -23,10 +24,17 @@ namespace DapperMvcApp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            //(localdb)\MSSQLLocalDB
+        {            
             string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=DapperMvcApp;Integrated Security=True";
             services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
+            services.AddTransient<IAccessTypeRepository, AccessTypeRepository>(provider => new AccessTypeRepository(connectionString));
+            
+            // установка конфигурации подключения
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
             services.AddControllersWithViews();
         }
                 
@@ -44,10 +52,9 @@ namespace DapperMvcApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseAuthentication();    // аутентификация
+            app.UseAuthorization();     // авторизация
 
             app.UseEndpoints(endpoints =>
             {

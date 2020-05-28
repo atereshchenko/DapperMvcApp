@@ -1,0 +1,26 @@
+﻿@model IEnumerable<DapperMvcApp.Models.Entities.AccessType>
+@{
+    ViewData["Title"] = "Список AccessType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Read</th>
+        <th>Write</th>
+        <th>Delete</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Title</td>
+            <td>@item.Read</td>
+            <td>@item.Write</td>
+            <td>@item.Delete</td>
+        </tr>
+    }
+</table>
