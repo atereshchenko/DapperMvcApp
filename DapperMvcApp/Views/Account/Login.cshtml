@@ -6,7 +6,7 @@
 
 <h2>Вход на сайт</h2>
 
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true" asp-route-returnUrl="@Model.ReturnUrl">
     <div class="validation" asp-validation-summary="ModelOnly" />
     @Html.ValidationSummary(true)
     <div>

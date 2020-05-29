@@ -75,6 +75,8 @@ namespace DapperMvcApp.Models.Services
         {
             connectionString = conn;
         }
+
+        #region public async methods
         public async Task<User> Get(int id)
         {
             var user = await Task.Run(() => GetUser(id));
@@ -110,7 +112,9 @@ namespace DapperMvcApp.Models.Services
         {
             return await Task.Run(() => DeleteUser(user));
         }
-        
+        #endregion
+
+        #region private methods
         private User GetUser(int id)
         {
             string query = "SELECT * FROM Users WHERE Id = @Id;";
@@ -139,7 +143,7 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<User>("SELECT * FROM Users").ToList();
+                return db.Query<User>("SELECT * FROM Users;").ToList();
             }
         }        
         private User CreateUser(string email, string password)
@@ -158,7 +162,7 @@ namespace DapperMvcApp.Models.Services
                 //db.Execute(sqlQuery, user);
 
                 // если мы хотим получить id добавленного пользователя
-                var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age); SELECT CAST(SCOPE_IDENTITY() as int)";
+                var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age); SELECT CAST(SCOPE_IDENTITY() as int);";
                 int? userId = db.Query<int>(sqlQuery, user).FirstOrDefault();
                 user.Id = userId.Value;
                 return user;
@@ -168,7 +172,7 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "UPDATE Users SET Name = @Name, Age = @Age WHERE Id = @Id";
+                var sqlQuery = "UPDATE Users SET Name = @Name, Age = @Age WHERE Id = @Id;";
                 db.Execute(sqlQuery, user);                
             }
             return user;
@@ -177,10 +181,11 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Users WHERE Id = @Id";
+                var sqlQuery = "DELETE FROM Users WHERE Id = @Id;";
                 db.Execute(sqlQuery, new { user.Id });
             }
             return user;
         }
+        #endregion
     }
 }

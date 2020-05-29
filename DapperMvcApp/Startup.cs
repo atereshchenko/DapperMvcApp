@@ -24,8 +24,9 @@ namespace DapperMvcApp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=DapperMvcApp;Integrated Security=True";
+        {
+            //string connectionString = "Server=(localdb)\\MSSQLLocalDB;Initial Catalog=DapperMvcApp;Integrated Security=True";
+            string connectionString = "Server=LG-D-54A5053332\\SQLEXPRESS;Database=DapperMvcApp;User ID=sa; Password=123456789Yy; Integrated Security=false;";
             services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
             services.AddTransient<IAccessTypeRepository, AccessTypeRepository>(provider => new AccessTypeRepository(connectionString));
             

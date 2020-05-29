@@ -29,9 +29,9 @@ namespace DapperMvcApp.Controllers
 
         [AllowAnonymous]
         [HttpGet]        
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
-            return View();
+            return View(new LoginModel { ReturnUrl = returnUrl });
         }
 
         [AllowAnonymous]
@@ -45,7 +45,7 @@ namespace DapperMvcApp.Controllers
                 if (user != null)
                 {
                     await Authenticate(user.Name);
-                    return RedirectToAction("Index", "Home");
+                    return Redirect(model.ReturnUrl);
                 }
                 ModelState.AddModelError("", "Пользователь с указанным логином и паролем не найден");
             }

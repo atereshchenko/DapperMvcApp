@@ -29,4 +29,4 @@ CREATE TABLE [dbo].[Users](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-INSERT INTO [dbo].[Users] ([Name],[Age]) VALUES ('Ivan',10)
+INSERT INTO [dbo].[Users] ([Name], [Email], [Password], [Age]) VALUES ('Test User', 'test@mail.ru', 'A1aaaaaa', 10)

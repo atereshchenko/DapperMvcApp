@@ -32,17 +32,10 @@ namespace DapperMvcApp.Models.Services
             connectionString = conn;
         }
 
+        #region public async methods
         public async Task<IEnumerable<AccessType>> GetItems()
         {
             return await Task.Run(() => GetItemsAccessTypes());
-        }        
-
-        private List<AccessType> GetItemsAccessTypes()
-        {
-            using (IDbConnection db = new SqlConnection(connectionString))
-            {
-                return db.Query<AccessType>("SELECT * FROM AccessTypes").ToList();
-            }
         }
 
         public async Task<AccessType> GetItems(int id)
@@ -50,13 +43,24 @@ namespace DapperMvcApp.Models.Services
             var user = await Task.Run(() => GetItemAccessTypes(id));
             return user;
         }
+        #endregion
+
+        #region private methods
+        private List<AccessType> GetItemsAccessTypes()
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<AccessType>("SELECT * FROM AccessTypes;").ToList();
+            }
+        }
 
         private AccessType GetItemAccessTypes(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<AccessType>("SELECT * FROM AccessTypes WHERE Id = @id", new { id }).FirstOrDefault();
+                return db.Query<AccessType>("SELECT * FROM AccessTypes WHERE Id = @id;", new { id }).FirstOrDefault();
             }
         }
+        #endregion
     }
 }
