@@ -14,14 +14,14 @@ namespace DapperMvcApp.Models.Services
         /// Получить список AccessType
         /// </summary>
         /// <returns>Список AccessType</returns>
-        Task<IEnumerable<AccessType>> GetItems();
+        Task<IEnumerable<AccessType>> ToList();
 
         /// <summary>
         /// Полчить запись AccessType по Id
         /// </summary>
         /// <param name="id">Id записи</param>
         /// <returns>AccessType</returns>
-        Task<AccessType> GetItems(int id);
+        Task<AccessType> FindById(int id);
     }
 
     public class AccessTypeRepository : IAccessTypeRepository
@@ -32,31 +32,35 @@ namespace DapperMvcApp.Models.Services
             connectionString = conn;
         }
 
-        public async Task<IEnumerable<AccessType>> GetItems()
+        #region public async methods
+        public async Task<IEnumerable<AccessType>> ToList()
         {
             return await Task.Run(() => GetItemsAccessTypes());
-        }        
+        }
 
+        public async Task<AccessType> FindById(int id)
+        {
+            var user = await Task.Run(() => GetItemAccessTypes(id));
+            return user;
+        }
+        #endregion
+
+        #region private methods
         private List<AccessType> GetItemsAccessTypes()
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<AccessType>("SELECT * FROM AccessTypes").ToList();
+                return db.Query<AccessType>("SELECT * FROM AccessTypes;").ToList();
             }
-        }
-
-        public async Task<AccessType> GetItems(int id)
-        {
-            var user = await Task.Run(() => GetItemAccessTypes(id));
-            return user;
         }
 
         private AccessType GetItemAccessTypes(int id)
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<AccessType>("SELECT * FROM AccessTypes WHERE Id = @id", new { id }).FirstOrDefault();
+                return db.Query<AccessType>("SELECT * FROM AccessTypes WHERE Id = @id;", new { id }).FirstOrDefault();
             }
         }
+        #endregion
     }
 }

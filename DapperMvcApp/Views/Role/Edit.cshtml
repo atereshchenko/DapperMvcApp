@@ -1,0 +1,22 @@
+﻿@model DapperMvcApp.Models.Entities.Role
+@{
+    ViewData["Title"] = "Редактировать Роль";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@ViewData["Title"].</h2>
+<form asp-action="Edit" asp-controller="Role">
+    <div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control" />
+        </div>        
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </div>
+</form>
+<div>
+
+    <a asp-controller="Role" asp-action="Index">Вернуться к списку</a>
+</div>

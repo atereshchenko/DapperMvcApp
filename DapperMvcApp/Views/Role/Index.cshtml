@@ -1,0 +1,31 @@
+﻿
+@model IEnumerable<DapperMvcApp.Models.Entities.Role>
+@{
+    ViewData["Title"] = "Список ролей";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p>
+    <a asp-controller="Role" asp-action="Create">Добавить</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Ид</th>
+        <th>Наименование</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td><a asp-controller="Role" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td>
+            <td>
+                <a asp-controller="Role" asp-action="Edit" asp-route-id="@item.Id">Изменить</a> @*|
+                <a asp-controller="Role" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>*@
+            </td>
+        </tr>
+    }
+</table>

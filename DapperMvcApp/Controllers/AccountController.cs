@@ -19,19 +19,19 @@ namespace DapperMvcApp.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-        private IUserRepository _userRep;
+        private IUserRepository _user;
 
-        public AccountController(ILogger<AccountController> logger, IUserRepository userRep)
+        public AccountController(ILogger<AccountController> logger, IUserRepository user)
         {
             _logger = logger;
-            _userRep = userRep;
+            _user = user;
         }
 
         [AllowAnonymous]
         [HttpGet]        
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
-            return View();
+            return View(new LoginModel { ReturnUrl = returnUrl });
         }
 
         [AllowAnonymous]
@@ -41,11 +41,18 @@ namespace DapperMvcApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userRep.Get(model.Email, model.Password);
+                User user = await _user.Get(model.Email, model.Password);
                 if (user != null)
                 {
                     await Authenticate(user.Name);
-                    return RedirectToAction("Index", "Home");
+                    if (model.ReturnUrl != null)
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError("", "Пользователь с указанным логином и паролем не найден");
             }
@@ -70,11 +77,11 @@ namespace DapperMvcApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userRep.Get(model.Email);
+                User user = await _user.FindByEmail(model.Email);
                 if (user == null)
                 {
-                    await _userRep.Create(model.Email, model.Password);
-                    await Authenticate(model.Email);
+                    await _user.Create(model.Email, model.Password);
+                    await Authenticate(user.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -100,7 +107,7 @@ namespace DapperMvcApp.Controllers
 
         private async Task Authenticate(string userName)
         {
-            // создаем один claim
+            // создаем claim
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName)

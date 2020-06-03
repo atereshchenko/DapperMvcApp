@@ -10,61 +10,14 @@ namespace DapperMvcApp.Models.Services
 {
     public interface IUserRepository
     {
-        /// <summary>
-        /// Выбрать пользователя по ИД
-        /// </summary>
-        /// <param name="id">ИД</param>
-        /// <returns>модель User</returns>
-        Task<User> Get(int id);
-
-        /// <summary>
-        /// Выбрать пользователя по Email
-        /// </summary>
-        /// <param name="email">Email</param>
-        /// <returns>модель User</returns>
-        Task<User> Get(string email);
-
-        /// <summary>
-        /// Выбрать пользователя по Email и Password
-        /// </summary>
-        /// <param name="email">Email пользователя</param>
-        /// <param name="password">Password пользователя</param>
-        /// <returns>модель User</returns>
+        Task<User> FindById(int id);        
+        Task<User> FindByEmail(string email);
         Task<User> Get(string email, string password);
-
-        /// <summary>
-        /// Выбрать список пользователей
-        /// </summary>
-        /// <returns>Список всех пользователей</returns>
-        Task<IEnumerable<User>> GetUsers();
-
-        /// <summary>
-        /// Создание пользователя
-        /// </summary>
-        /// <param name="email">Емайл</param>
-        /// <param name="password">Пароль</param>
-        /// <returns>Пользователь</returns>
+        //Task<IEnumerable<User>> GetUsers();
+        Task<IEnumerable<User>> ToList();
         Task<User> Create(string email, string password);
-
-        /// <summary>
-        /// Создание пользователя
-        /// </summary>
-        /// <param name="user">Модель Пользователя</param>
-        /// <returns>Пользователь</returns>
         Task<User> Create(User user);
-
-        /// <summary>
-        /// Обновление пользователя
-        /// </summary>
-        /// <param name="user">Модель Пользователя</param>
-        /// <returns>Пользователь</returns>
         Task<User> Update(User user);
-
-        /// <summary>
-        /// Удаление пользователя
-        /// </summary>
-        /// <param name="user">Модель Пользователя</param>
-        /// <returns>Пользователь</returns>
         Task<User> Delete(User user);        
     }
 
@@ -75,12 +28,14 @@ namespace DapperMvcApp.Models.Services
         {
             connectionString = conn;
         }
-        public async Task<User> Get(int id)
+
+        #region public async methods
+        public async Task<User> FindById(int id)
         {
             var user = await Task.Run(() => GetUser(id));
             return user;
         }
-        public async Task<User> Get(string email)
+        public async Task<User> FindByEmail(string email)
         {
             var user = await Task.Run(() => GetUser(email));
             return user;
@@ -90,7 +45,7 @@ namespace DapperMvcApp.Models.Services
             var user = await Task.Run(() => GetUser(email, password));
             return user;
         }
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<User>> ToList()
         {
             return await Task.Run(() => GetListUsers());
         }
@@ -110,7 +65,9 @@ namespace DapperMvcApp.Models.Services
         {
             return await Task.Run(() => DeleteUser(user));
         }
-        
+        #endregion
+
+        #region private methods
         private User GetUser(int id)
         {
             string query = "SELECT * FROM Users WHERE Id = @Id;";
@@ -139,7 +96,7 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<User>("SELECT * FROM Users").ToList();
+                return db.Query<User>("SELECT * FROM Users;").ToList();
             }
         }        
         private User CreateUser(string email, string password)
@@ -154,11 +111,7 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                //var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age)";
-                //db.Execute(sqlQuery, user);
-
-                // если мы хотим получить id добавленного пользователя
-                var sqlQuery = "INSERT INTO Users (Name, Age) VALUES(@Name, @Age); SELECT CAST(SCOPE_IDENTITY() as int)";
+                var sqlQuery = "INSERT INTO Users (Name, Age, Email) VALUES(@Name, @Age, @Email); SELECT CAST(SCOPE_IDENTITY() as int);";
                 int? userId = db.Query<int>(sqlQuery, user).FirstOrDefault();
                 user.Id = userId.Value;
                 return user;
@@ -168,7 +121,7 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "UPDATE Users SET Name = @Name, Age = @Age WHERE Id = @Id";
+                var sqlQuery = "UPDATE Users SET Name = @Name, Age = @Age, Email = @Email WHERE Id = @Id;";
                 db.Execute(sqlQuery, user);                
             }
             return user;
@@ -177,10 +130,11 @@ namespace DapperMvcApp.Models.Services
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Users WHERE Id = @Id";
+                var sqlQuery = "DELETE FROM Users WHERE Id = @Id;";
                 db.Execute(sqlQuery, new { user.Id });
             }
             return user;
         }
+        #endregion
     }
 }

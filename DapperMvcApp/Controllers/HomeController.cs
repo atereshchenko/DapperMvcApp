@@ -25,9 +25,19 @@ namespace DapperMvcApp.Controllers
             return View();
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
+            if (Request.IsHttps)
+            {
+                ViewData["CurrentHost"] = "https://" + Request.Host;
+                ViewData["Privacy"] = "https://" + Request.Host + Request.Path;
+            }
+            else
+            {
+                ViewData["CurrentHost"] = "http://" + Request.Host;
+                ViewData["Privacy"] = "http://" + Request.Host + Request.Path;
+            }            
             return View();
         }
 
