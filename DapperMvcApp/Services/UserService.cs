@@ -15,14 +15,14 @@ namespace DapperMvcApp.Models.Services
         /// </summary>
         /// <param name="id">ИД</param>
         /// <returns>модель User</returns>
-        Task<User> Get(int id);
+        Task<User> Get(int id);        
 
         /// <summary>
         /// Выбрать пользователя по Email
         /// </summary>
         /// <param name="email">Email</param>
         /// <returns>модель User</returns>
-        Task<User> Get(string email);
+        Task<User> Get(string email);        
 
         /// <summary>
         /// Выбрать пользователя по Email и Password

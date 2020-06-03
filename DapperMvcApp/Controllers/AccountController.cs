@@ -81,7 +81,7 @@ namespace DapperMvcApp.Controllers
                 if (user == null)
                 {
                     await _userRep.Create(model.Email, model.Password);
-                    await Authenticate(model.Email);
+                    await Authenticate(user.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -107,7 +107,7 @@ namespace DapperMvcApp.Controllers
 
         private async Task Authenticate(string userName)
         {
-            // создаем один claim
+            // создаем claim
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName)

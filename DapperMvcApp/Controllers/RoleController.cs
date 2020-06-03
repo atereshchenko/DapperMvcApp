@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DapperMvcApp.Models.Entities;
 using DapperMvcApp.Models.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DapperMvcApp.Controllers
@@ -12,10 +13,12 @@ namespace DapperMvcApp.Controllers
     public class RoleController : Controller
     {
         readonly IRoleRepository role;
+        readonly IUserRepository userManager;
 
-        public RoleController(IRoleRepository _role)
+        public RoleController(IRoleRepository _role, IUserRepository _userManager)
         {
             role = _role;
+            userManager = _userManager;
         }
 
         [Authorize]
@@ -25,8 +28,14 @@ namespace DapperMvcApp.Controllers
         }
 
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> UserList()
         {
+            return View(await userManager.GetUsers());
+        }
+        
+        [Authorize]
+        public IActionResult Create()
+        {            
             return View();
         }
 
@@ -45,7 +54,7 @@ namespace DapperMvcApp.Controllers
             if (_role != null)
                 return View(_role);
             return NotFound();
-        }
+        }        
 
         [Authorize]
         [HttpPost]
@@ -53,7 +62,6 @@ namespace DapperMvcApp.Controllers
         {
             await role.Update(_role);
             return RedirectToAction("Index");
-        }
-
+        }      
     }
 }
