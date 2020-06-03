@@ -13,12 +13,12 @@ namespace DapperMvcApp.Controllers
     public class RoleController : Controller
     {
         readonly IRoleRepository _role;
-        readonly IUserRepository _userManager;
+        readonly IUserRepository _user;
 
         public RoleController(IRoleRepository role, IUserRepository userManager)
         {
             _role = role;
-            _userManager = userManager;
+            _user = userManager;
         }
 
         [Authorize]
@@ -30,7 +30,7 @@ namespace DapperMvcApp.Controllers
         [Authorize]
         public async Task<IActionResult> UserList()
         {
-            return View(await _userManager.ToList());
+            return View(await _user.ToList());
         }
         
         [Authorize]

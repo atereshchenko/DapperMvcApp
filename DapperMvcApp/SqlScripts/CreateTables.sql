@@ -75,3 +75,13 @@ GO
 
 ALTER TABLE [dbo].[UserRoles] CHECK CONSTRAINT [FK_UserRoles_Users_UserId]
 GO
+
+--View Data
+SELECT * FROM [DapperMvcApp].[dbo].[Users]
+SELECT * FROM [DapperMvcApp].[dbo].[Roles]
+SELECT * FROM [DapperMvcApp].[dbo].[UserRoles]
+
+SELECT Users.*, [Roles].*
+FROM [dbo].[Users] AS Users
+INNER JOIN [dbo].[UserRoles] AS UserRoles ON Users.Id = UserRoles.UserId
+INNER JOIN [dbo].[Roles] AS [Roles] ON UserRoles.RoleId = [Roles].Id
