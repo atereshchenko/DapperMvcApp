@@ -12,25 +12,25 @@ namespace DapperMvcApp.Controllers
 {
     public class RoleController : Controller
     {
-        readonly IRoleRepository role;
-        readonly IUserRepository userManager;
+        readonly IRoleRepository _role;
+        readonly IUserRepository _userManager;
 
-        public RoleController(IRoleRepository _role, IUserRepository _userManager)
+        public RoleController(IRoleRepository role, IUserRepository userManager)
         {
-            role = _role;
-            userManager = _userManager;
+            _role = role;
+            _userManager = userManager;
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await role.GetRoles());
+            return View(await _role.ToList());
         }
 
         [Authorize]
         public async Task<IActionResult> UserList()
         {
-            return View(await userManager.GetUsers());
+            return View(await _userManager.ToList());
         }
         
         [Authorize]
@@ -41,27 +41,27 @@ namespace DapperMvcApp.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(Role _role)
+        public async Task<IActionResult> Create(Role role)
         {
-            await role.Create(_role);
+            await _role.Create(role);
             return RedirectToAction("Index");
         }
         
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            Role _role = await role.Get(id);
-            if (_role != null)
-                return View(_role);
+            Role role = await _role.FindById(id);
+            if (role != null)
+                return View(role);
             return NotFound();
         }        
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Edit(Role _role)
+        public async Task<IActionResult> Edit(Role role)
         {
-            await role.Update(_role);
+            await _role.Update(role);
             return RedirectToAction("Index");
-        }      
+        }
     }
 }

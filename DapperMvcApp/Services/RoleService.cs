@@ -11,8 +11,8 @@ namespace DapperMvcApp.Models.Services
 {
     public interface IRoleRepository
     {
-        Task<Role> Get(int id);
-        Task<IEnumerable<Role>> GetRoles();
+        Task<Role> FindById(int id);
+        Task<IEnumerable<Role>> ToList();
         Task<Role> Create(Role _role);
         Task<Role> Update(Role _role);
     }
@@ -25,12 +25,12 @@ namespace DapperMvcApp.Models.Services
         }
 
         #region public async methods
-        public async Task<Role> Get(int id)
+        public async Task<Role> FindById(int id)
         {
             var user = await Task.Run(() => GetRole(id));
             return user;
         }
-        public async Task<IEnumerable<Role>> GetRoles()
+        public async Task<IEnumerable<Role>> ToList()
         {
             return await Task.Run(() => GetListRoles());
         }        

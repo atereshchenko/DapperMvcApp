@@ -14,14 +14,14 @@ namespace DapperMvcApp.Models.Services
         /// Получить список AccessType
         /// </summary>
         /// <returns>Список AccessType</returns>
-        Task<IEnumerable<AccessType>> GetItems();
+        Task<IEnumerable<AccessType>> ToList();
 
         /// <summary>
         /// Полчить запись AccessType по Id
         /// </summary>
         /// <param name="id">Id записи</param>
         /// <returns>AccessType</returns>
-        Task<AccessType> GetItems(int id);
+        Task<AccessType> FindById(int id);
     }
 
     public class AccessTypeRepository : IAccessTypeRepository
@@ -33,12 +33,12 @@ namespace DapperMvcApp.Models.Services
         }
 
         #region public async methods
-        public async Task<IEnumerable<AccessType>> GetItems()
+        public async Task<IEnumerable<AccessType>> ToList()
         {
             return await Task.Run(() => GetItemsAccessTypes());
         }
 
-        public async Task<AccessType> GetItems(int id)
+        public async Task<AccessType> FindById(int id)
         {
             var user = await Task.Run(() => GetItemAccessTypes(id));
             return user;

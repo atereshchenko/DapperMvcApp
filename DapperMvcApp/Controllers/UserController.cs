@@ -11,22 +11,22 @@ namespace DapperMvcApp.Controllers
 {
     public class UserController : Controller
     {
-        readonly IUserRepository repos;
-        public UserController(IUserRepository r)
+        readonly IUserRepository _user;
+        public UserController(IUserRepository user)
         {
-            repos = r;
+            _user = user;
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await repos.GetUsers());
+            return View(await _user.ToList());
         }
 
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            User user = await repos.Get(id);
+            User user = await _user.FindById(id);
             if (user != null)
                 return View(user);
             return NotFound();
@@ -42,14 +42,14 @@ namespace DapperMvcApp.Controllers
         [HttpPost]        
         public async Task<IActionResult> Create(User user)
         {
-            await repos.Create(user);
+            await _user.Create(user);
             return RedirectToAction("Index");
         }
 
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            User user = await repos.Get(id);
+            User user = await _user.FindById(id);
             if (user != null)
                 return View(user);
             return NotFound();
@@ -59,7 +59,7 @@ namespace DapperMvcApp.Controllers
         [HttpPost]        
         public async Task<IActionResult> Edit(User user)
         {
-            await repos.Update(user);
+            await _user.Update(user);
             return RedirectToAction("Index");
         }
 
@@ -68,7 +68,7 @@ namespace DapperMvcApp.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
-            User user = await repos.Get(id);
+            User user = await _user.FindById(id);
             if (user != null)
                 return View(user);
             return NotFound();
@@ -78,8 +78,8 @@ namespace DapperMvcApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            User user = await repos.Get(id);
-            await repos.Delete(user);
+            User user = await _user.FindById(id);
+            await _user.Delete(user);
             return RedirectToAction("Index");
         }
     }

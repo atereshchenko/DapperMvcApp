@@ -11,22 +11,22 @@ namespace DapperMvcApp.Controllers
 {
     public class AccessTypeController : Controller
     {
-        readonly IAccessTypeRepository repos;
-        public AccessTypeController(IAccessTypeRepository r)
+        readonly IAccessTypeRepository _accesstype;
+        public AccessTypeController(IAccessTypeRepository accesstype)
         {
-            repos = r;
+            _accesstype = accesstype;
         }
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            return View(await repos.GetItems());
+            return View(await _accesstype.ToList());
         }
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            AccessType user = await repos.GetItems(id);
-            if (user != null)
-                return View(user);
+            AccessType tmp = await _accesstype.FindById(id);
+            if (tmp != null)
+                return View(tmp);
             return NotFound();
         }
     }

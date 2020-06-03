@@ -19,12 +19,12 @@ namespace DapperMvcApp.Controllers
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
-        private IUserRepository _userRep;
+        private IUserRepository _user;
 
-        public AccountController(ILogger<AccountController> logger, IUserRepository userRep)
+        public AccountController(ILogger<AccountController> logger, IUserRepository user)
         {
             _logger = logger;
-            _userRep = userRep;
+            _user = user;
         }
 
         [AllowAnonymous]
@@ -41,7 +41,7 @@ namespace DapperMvcApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userRep.Get(model.Email, model.Password);
+                User user = await _user.Get(model.Email, model.Password);
                 if (user != null)
                 {
                     await Authenticate(user.Name);
@@ -77,10 +77,10 @@ namespace DapperMvcApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userRep.Get(model.Email);
+                User user = await _user.FindByEmail(model.Email);
                 if (user == null)
                 {
-                    await _userRep.Create(model.Email, model.Password);
+                    await _user.Create(model.Email, model.Password);
                     await Authenticate(user.Email);
                     return RedirectToAction("Index", "Home");
                 }
