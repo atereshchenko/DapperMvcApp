@@ -29,7 +29,8 @@ namespace DapperMvcApp
             string connectionString = "Server=LG-D-54A5053332\\SQLEXPRESS;Database=DapperMvcApp;User ID=sa; Password=123456789Yy; Integrated Security=false;";
             services.AddTransient<IUserRepository, UserRepository>(provider => new UserRepository(connectionString));
             services.AddTransient<IAccessTypeRepository, AccessTypeRepository>(provider => new AccessTypeRepository(connectionString));
-            
+            services.AddTransient<IRoleRepository, RoleRepository>(provider => new RoleRepository(connectionString));
+
             // установка конфигурации подключения
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions

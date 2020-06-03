@@ -45,7 +45,14 @@ namespace DapperMvcApp.Controllers
                 if (user != null)
                 {
                     await Authenticate(user.Name);
-                    return Redirect(model.ReturnUrl);
+                    if (model.ReturnUrl != null)
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 ModelState.AddModelError("", "Пользователь с указанным логином и паролем не найден");
             }

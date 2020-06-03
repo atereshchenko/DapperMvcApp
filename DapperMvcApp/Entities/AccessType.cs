@@ -1,5 +1,8 @@
-﻿namespace DapperMvcApp.Models.Entities
+﻿using Dapper.Contrib.Extensions;
+
+namespace DapperMvcApp.Models.Entities
 {
+    [Table("AccessTypes")]
     public class AccessType
     {
         public int Id { get; set; }
