@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using DapperMvcApp.Models.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DapperMvcApp.Models.Entities;
 
 namespace DapperMvcApp
 {
