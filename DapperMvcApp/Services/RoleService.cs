@@ -13,8 +13,9 @@ namespace DapperMvcApp.Models.Services
     {
         Task<Role> FindById(int id);
         Task<IEnumerable<Role>> ToList();
+        Task<IEnumerable<Role>> UsersInRole();
         Task<Role> Create(Role _role);
-        Task<Role> Update(Role _role);
+        Task<Role> Update(Role _role);        
     }
     public class RoleRepository : IRoleRepository
     {
@@ -31,9 +32,13 @@ namespace DapperMvcApp.Models.Services
             return user;
         }
         public async Task<IEnumerable<Role>> ToList()
-        {
+        {            
             return await Task.Run(() => GetListRoles());
-        }        
+        }
+        public async Task<IEnumerable<Role>> UsersInRole()
+        {
+            return await Task.Run(() => RoleToUser());
+        }
         public async Task<Role> Create(Role _role)
         {
             return await Task.Run(() => CreateRole(_role));
@@ -41,7 +46,7 @@ namespace DapperMvcApp.Models.Services
         public async Task<Role> Update(Role _role)
         {
             return await Task.Run(() => UpdateRole(_role));
-        }
+        }        
         #endregion
 
         #region private methods
@@ -82,6 +87,34 @@ namespace DapperMvcApp.Models.Services
                 db.Execute(sqlQuery, _role);
             }
             return _role;
+        }
+
+        private List<Role> RoleToUser()
+        {
+            string query = "SELECT [Roles].*, [Users].* " +                
+                "FROM [dbo].[Roles] AS [Roles] " +
+                "INNER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId " +
+                "INNER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<Role, User, Role>(
+                        query,
+                        (role, user) =>
+                        {
+                            role.Users = role.Users ?? new List<User>();
+                            role.Users.Add(user);
+                            return role;
+                        },
+                        splitOn: "Id"
+                    )
+                    .GroupBy(o => o.Id)
+                    .Select(group =>
+                    {
+                        var combinedRole = group.First();
+                        combinedRole.Users = group.Select(role => role.Users.Single()).ToList();
+                        return combinedRole;
+                    }).ToList();               
+            }           
         }
         #endregion
     }

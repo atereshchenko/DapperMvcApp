@@ -28,9 +28,9 @@ namespace DapperMvcApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UserList()
-        {
-            return View(await _user.ToList());
+        public async Task<IActionResult> Users()
+        {            
+            return View(await _role.UsersInRole());
         }
         
         [Authorize]
