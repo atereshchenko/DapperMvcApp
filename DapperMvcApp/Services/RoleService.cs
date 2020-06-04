@@ -37,7 +37,7 @@ namespace DapperMvcApp.Models.Services
         }
         public async Task<IEnumerable<Role>> UsersInRole()
         {
-            return await Task.Run(() => RoleToUser());
+            return await Task.Run(() => UserInRole());
         }
         public async Task<Role> Create(Role _role)
         {
@@ -88,13 +88,12 @@ namespace DapperMvcApp.Models.Services
             }
             return _role;
         }
-
-        private List<Role> RoleToUser()
+        private List<Role> UserInRole()
         {
             string query = "SELECT [Roles].*, [Users].* " +                
                 "FROM [dbo].[Roles] AS [Roles] " +
-                "INNER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId " +
-                "INNER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;";
+                "LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId " +
+                "LEFT OUTER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<Role, User, Role>(

@@ -5,16 +5,22 @@
     @foreach (var role in Model)
     {
         <tr>
-            <td>@role.Name</td>
-            <td>
+            <td>@role.Name</td>            
+            <td>                
                 <ol>
                     @foreach (var user in role.Users)
                     {
-                        <li>
-                            <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
-                        </li>
+                        if (user != null)
+                        {
+                            <li>
+                                <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
+                            </li>
+                        }
                     }
-                </ol>
+                </ol>                
+             </td>
+            <td>
+                <a class="btn btn-sm btn-primary" asp-controller="Role" asp-action="Edit" asp-route-id="@role.Id">Изменить</a>
             </td>
         </tr>
     }
