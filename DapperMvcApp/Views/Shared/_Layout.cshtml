@@ -25,23 +25,30 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Users</a>
+                        {                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" data-toggle="dropdown" href="#">Users</a>
+                                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">
+                                        List Users
+                                    </a>
+                                    <a class="nav-link" asp-area="" asp-controller="User" asp-action="Roles">
+                                        List Roles in User
+                                    </a>
+                                </div>
                             </li>
 
-                            @*<li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="Index">Roles</a>
-                            </li>*@
                             <li class="nav-item dropdown">
                                 <a class="nav-link" data-toggle="dropdown" href="#">Roles</a>
                                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                    <a class="nav-link" asp-area="" asp-controller="Role" asp-action="Index">
+                                        List Roles
+                                    </a>
                                     <a class="nav-link" asp-area="" asp-controller="Role" asp-action="Users">
                                         List Users in Role
                                     </a>
                                 </div>
                             </li>
-
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link" data-toggle="dropdown" href="#">

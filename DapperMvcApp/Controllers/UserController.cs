@@ -67,6 +67,12 @@ namespace DapperMvcApp.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> Roles()
+        {
+            return View(await _user.RolesInUser());
+        }
+
+        [Authorize]
         [HttpGet]
         [ActionName("Delete")]
         public async Task<IActionResult> ConfirmDelete(int id)

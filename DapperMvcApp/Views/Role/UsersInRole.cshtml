@@ -5,7 +5,9 @@
     @foreach (var role in Model)
     {
         <tr>
-            <td>@role.Name</td>
+            <td>
+                <a asp-controller="Role" asp-action="Details" asp-route-id="@role.Id">@role.Name</a>
+            </td>
             <td>
                 <ol>
                     @foreach (var user in role.Users)

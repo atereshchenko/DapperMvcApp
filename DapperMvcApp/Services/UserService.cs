@@ -14,6 +14,7 @@ namespace DapperMvcApp.Models.Services
         Task<User> FindByEmail(string email);
         Task<User> Get(string email, string password);        
         Task<IEnumerable<User>> ToList();
+        Task<IEnumerable<User>> RolesInUser();
         Task<User> Create(string email, string password);
         Task<User> Create(User user);
         Task<User> Update(User user);
@@ -47,6 +48,11 @@ namespace DapperMvcApp.Models.Services
         public async Task<IEnumerable<User>> ToList()
         {
             return await Task.Run(() => GetListUsers());
+        }
+
+        public async Task<IEnumerable<User>> RolesInUser()
+        {
+            return await Task.Run(() => RoleInUser());
         }
         public async Task<User> Create(string email, string password)
         {
@@ -142,6 +148,34 @@ namespace DapperMvcApp.Models.Services
                 db.Execute(sqlQuery, new { user.Id });
             }
             return user;
+        }
+
+        private List<User> RoleInUser()
+        {
+            string query = "Select [Users].*, [Roles].* " +
+                "FROM [dbo].[Users] AS [Users] " +
+                "LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Users].Id = UserRoles.UserId " +
+                "LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id ;";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<User, Role, User>(
+                        query,
+                        (user, role) =>
+                        {
+                            user.Roles = user.Roles ?? new List<Role>();                        
+                            user.Roles.Add(role);
+                            return user;
+                        },
+                        splitOn: "Id"
+                    )
+                    .GroupBy(o => o.Id)
+                    .Select(group =>
+                    {
+                        var combinedUser = group.First();
+                        combinedUser.Roles = group.Select(user => user.Roles.Single()).ToList();
+                        return combinedUser;
+                    }).ToList();
+            }
         }
         #endregion
     }
