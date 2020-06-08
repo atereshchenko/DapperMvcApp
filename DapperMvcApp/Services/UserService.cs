@@ -15,6 +15,7 @@ namespace DapperMvcApp.Models.Services
         Task<User> Get(string email, string password);        
         Task<IEnumerable<User>> ToList();
         Task<IEnumerable<User>> RolesInUser();
+        Task<IEnumerable<Role>> RolesInUser(int id);
         Task<User> Create(string email, string password);
         Task<User> Create(User user);
         Task<User> Update(User user);
@@ -49,10 +50,13 @@ namespace DapperMvcApp.Models.Services
         {
             return await Task.Run(() => GetListUsers());
         }
-
         public async Task<IEnumerable<User>> RolesInUser()
         {
             return await Task.Run(() => RoleInUser());
+        }
+        public async Task<IEnumerable<Role>> RolesInUser(int id)
+        {
+            return await Task.Run(() => RoleInUser(id));
         }
         public async Task<User> Create(string email, string password)
         {
@@ -149,7 +153,6 @@ namespace DapperMvcApp.Models.Services
             }
             return user;
         }
-
         private List<User> RoleInUser()
         {
             string query = "Select [Users].*, [Roles].* " +
@@ -175,6 +178,18 @@ namespace DapperMvcApp.Models.Services
                         combinedUser.Roles = group.Select(user => user.Roles.Single()).ToList();
                         return combinedUser;
                     }).ToList();
+            }
+        }
+        private List<Role> RoleInUser(int id)
+        {
+            string query = "Select [Roles].* " +
+                "FROM [dbo].[Users] AS [Users] " +
+                "LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Users].Id = UserRoles.UserId " +
+                "LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id " +
+                "Where [Users].Id = @Id;";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                return db.Query<Role>(query, new { Id = id }).ToList();
             }
         }
         #endregion

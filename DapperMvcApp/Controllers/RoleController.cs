@@ -74,6 +74,27 @@ namespace DapperMvcApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]        
+        public async Task<IActionResult> Change(string userId)
+        {
+            int _id = int.Parse(userId);
+            User user = await _user.FindById(_id);
+            if (user != null)
+            {
+                var userRoles = await _user.RolesInUser(user.Id);                
+                var allRoles = await _role.ToListRole();
+                ChangeRoleModel model = new ChangeRoleModel
+                {
+                    UserId = user.Id,
+                    UserEmail = user.Email,
+                    UserRoles = userRoles, // Вот тут ошибка 
+                    AllRoles = allRoles
+                };
+                return View(model);
+            }
+            return NotFound();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
