@@ -12,8 +12,7 @@ namespace DapperMvcApp.Models.Services
     {
         Task<User> FindById(int id);        
         Task<User> FindByEmail(string email);
-        Task<User> Get(string email, string password);
-        //Task<IEnumerable<User>> GetUsers();
+        Task<User> Get(string email, string password);        
         Task<IEnumerable<User>> ToList();
         Task<User> Create(string email, string password);
         Task<User> Create(User user);
@@ -101,11 +100,20 @@ namespace DapperMvcApp.Models.Services
         }        
         private User CreateUser(string email, string password)
         {
-            string query = "INSERT INTO Users (Name, Email, Password) Values (@Name, @Email, @Password);";
+            User user = new User();
+            string query = "INSERT INTO Users (Name, Email, Password) Values (@Name, @Email, @Password); SELECT CAST(SCOPE_IDENTITY() as int);";
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {                
+                int? userId = db.Query<int>(query, new { Name = email, Email = email, Password = password }).FirstOrDefault();
+                user = GetUser(userId.Value);
+            }
+
+            string query2 = "INSERT INTO [dbo].[UserRoles] ([UserId], [RoleId]) Values (@UserId, @RoleId);";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<User>(query, new {Name = email, Email = email, Password = password }).FirstOrDefault();
-            }
+                db.Query<UserRole>(query2, new { UserId = user.Id, RoleId = 3 }).FirstOrDefault();
+            }            
+            return user;
         }
         private User CreateUser(User user)
         {

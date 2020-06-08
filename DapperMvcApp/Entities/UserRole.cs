@@ -10,17 +10,11 @@ namespace DapperMvcApp.Models.Entities
 {
     [Table("UserRoles")]
     public class UserRole
-    {
-        [Dapper.Contrib.Extensions.Key]
-        public int UserId { get; set; }
-
-        [Dapper.Contrib.Extensions.Key]
+    {        
+        public int UserId { get; set; }        
         public int RoleId { get; set; }
-
         public virtual List<Role> Roles { get; set; }
-
         public virtual List<User> Users { get; set; }
-
         public UserRole()
         {
             Roles = new List<Role>();
