@@ -75,3 +75,9 @@ GO
 
 ALTER TABLE [dbo].[UserRoles] CHECK CONSTRAINT [FK_UserRoles_Users_UserId]
 GO
+
+--Запрос Пользователи в роли (многие-ко-многим)
+SELECT [Roles].*, [Users].* 
+FROM [dbo].[Roles] AS [Roles] 
+INNER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId 
+INNER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;

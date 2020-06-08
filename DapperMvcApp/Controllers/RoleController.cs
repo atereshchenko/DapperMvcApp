@@ -1,24 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using DapperMvcApp.Models.Entities;
 using DapperMvcApp.Models.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using DapperMvcApp.Models;
+
+
 
 namespace DapperMvcApp.Controllers
 {
     public class RoleController : Controller
     {
-        readonly IRoleRepository _role;
-        readonly IUserRepository _userManager;
+        private readonly ILogger<RoleController> _logger;
+        private readonly IRoleRepository _role;
+        private readonly IUserRepository _user;
 
-        public RoleController(IRoleRepository role, IUserRepository userManager)
+        public RoleController(ILogger<RoleController> logger, IRoleRepository role, IUserRepository userManager)
         {
+            _logger = logger;
             _role = role;
-            _userManager = userManager;
+            _user = userManager;
         }
 
         [Authorize]
@@ -28,11 +32,17 @@ namespace DapperMvcApp.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UserList()
-        {
-            return View(await _userManager.ToList());
+        public async Task<IActionResult> Users()
+        {            
+            return View(await _role.UsersInRole());
         }
-        
+
+        [Authorize]
+        public async Task<IActionResult> UsersInRole(int id)
+        {
+            return View(await _role.UsersInRole(id));
+        }
+
         [Authorize]
         public IActionResult Create()
         {            
@@ -62,6 +72,12 @@ namespace DapperMvcApp.Controllers
         {
             await _role.Update(role);
             return RedirectToAction("Index");
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

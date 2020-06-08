@@ -80,7 +80,7 @@ namespace DapperMvcApp.Controllers
                 User user = await _user.FindByEmail(model.Email);
                 if (user == null)
                 {
-                    await _user.Create(model.Email, model.Password);
+                    user = await _user.Create(model.Email, model.Password);
                     await Authenticate(user.Email);
                     return RedirectToAction("Index", "Home");
                 }

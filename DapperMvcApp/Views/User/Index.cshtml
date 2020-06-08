@@ -11,10 +11,11 @@
 
 <table class="table">
     <tr>
-        <th>Ид</th>
-        <th>Имя</th>
-        <th>Возраст</th>
-        <th></th>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Actions</th>
     </tr>
 
     @foreach (var item in Model)
@@ -22,10 +23,11 @@
         <tr>
             <td>@item.Id</td>
             <td><a asp-controller="User" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td>
+            <td>@item.Email</td>
             <td>@item.Age</td>
             <td>
-                <a asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
-                <a asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                <a class="btn btn-sm btn-primary" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                <a class="btn btn-sm btn-danger" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
     }

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<DapperMvcApp.Models.Entities.Role>
+
+<h2>Пользователи групы</h2>
+<table class="table">
+    @foreach (var role in Model)
+    {
+        <tr>
+            <td>
+                <a asp-controller="Role" asp-action="Details" asp-route-id="@role.Id">@role.Name</a>
+            </td>
+            <td>
+                <ol>
+                    @foreach (var user in role.Users)
+                    {
+                        if (user != null)
+                        {
+                            <li>
+                                <a asp-controller="User" asp-action="Details" asp-route-id="@user.Id">@user.Name</a>
+                            </li>
+                        }
+                    }
+                </ol>
+            </td>
+        </tr>
+    }
+</table>
