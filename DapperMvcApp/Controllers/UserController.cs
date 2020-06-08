@@ -6,14 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using DapperMvcApp.Models.Entities;
 using DapperMvcApp.Models.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace DapperMvcApp.Controllers
 {
     public class UserController : Controller
     {
         readonly IUserRepository _user;
-        public UserController(IUserRepository user)
+        private readonly ILogger<UserController> _logger;
+        public UserController(ILogger<UserController> logger, IUserRepository user)
         {
+            _logger = logger;
             _user = user;
         }
 
