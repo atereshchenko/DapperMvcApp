@@ -1,14 +1,12 @@
 ﻿@model IEnumerable<DapperMvcApp.Models.Entities.Role>
 
-<h2>Группы пользователей</h2>
+<h2>Пользователи групы</h2>
 <table class="table">
     @foreach (var role in Model)
     {
         <tr>
+            <td>@role.Name</td>
             <td>
-                <a asp-controller="Role" asp-action="UsersInRole" asp-route-id="@role.Id">@role.Name</a>
-            </td>            
-            <td>                
                 <ol>
                     @foreach (var user in role.Users)
                     {
@@ -19,10 +17,7 @@
                             </li>
                         }
                     }
-                </ol>                
-             </td>
-            <td>
-                <a class="btn btn-sm btn-primary" asp-controller="Role" asp-action="Edit" asp-route-id="@role.Id">Изменить</a>
+                </ol>
             </td>
         </tr>
     }

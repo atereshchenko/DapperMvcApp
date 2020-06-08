@@ -36,7 +36,13 @@ namespace DapperMvcApp.Controllers
         {            
             return View(await _role.UsersInRole());
         }
-        
+
+        [Authorize]
+        public async Task<IActionResult> UsersInRole(int id)
+        {
+            return View(await _role.UsersInRole(id));
+        }
+
         [Authorize]
         public IActionResult Create()
         {            
