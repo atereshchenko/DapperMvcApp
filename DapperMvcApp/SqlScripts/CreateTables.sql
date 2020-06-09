@@ -83,5 +83,10 @@ INSERT INTO [dbo].[UserRoles]([UserId],[RoleId]) VALUES (3,3)
 --Запрос Пользователи в роли (многие-ко-многим)
 SELECT [Roles].*, [Users].* 
 FROM [dbo].[Roles] AS [Roles] 
-INNER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId 
-INNER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;
+LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Roles].Id = UserRoles.RoleId 
+LEFT OUTER JOIN [dbo].[Users] AS Users on UserRoles.UserId = Users.Id;
+
+Select [Users].*, [Roles].*
+FROM [dbo].[Users] AS [Users] 
+LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Users].Id = UserRoles.UserId 
+LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id

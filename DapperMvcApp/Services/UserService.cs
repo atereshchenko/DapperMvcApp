@@ -169,7 +169,7 @@ namespace DapperMvcApp.Services
             string query = "Select [Users].*, [Roles].* " +
                 "FROM [dbo].[Users] AS [Users] " +
                 "LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Users].Id = UserRoles.UserId " +
-                "LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id ;";
+                "LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id;";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<User, Role, User>(
