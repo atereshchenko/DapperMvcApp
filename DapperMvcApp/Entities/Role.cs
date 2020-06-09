@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DapperMvcApp.Models.Entities
+namespace DapperMvcApp.Entities
 {
     [Table("Roles")]
     public class Role

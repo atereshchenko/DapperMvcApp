@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DapperMvcApp.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DapperMvcApp.Models.Entities
+namespace DapperMvcApp.ViewModels
 {
     public class ChangeRoleModel
     {

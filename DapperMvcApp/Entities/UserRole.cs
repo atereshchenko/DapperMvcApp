@@ -1,12 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
-using DapperMvcApp.Models.Entities;
+using DapperMvcApp.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DapperMvcApp.Models.Entities
+namespace DapperMvcApp.Entities
 {
     [Table("UserRoles")]
     public class UserRole

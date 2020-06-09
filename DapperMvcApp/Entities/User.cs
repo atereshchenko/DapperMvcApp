@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DapperMvcApp.Models.Entities
+namespace DapperMvcApp.Entities
 {
     [Table("Users")]
     public class User

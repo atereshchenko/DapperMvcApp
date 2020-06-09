@@ -1,6 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 
-namespace DapperMvcApp.Models.Entities
+namespace DapperMvcApp.Entities
 {
     [Table("AccessTypes")]
     public class AccessType

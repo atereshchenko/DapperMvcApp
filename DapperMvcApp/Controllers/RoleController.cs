@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
-using DapperMvcApp.Models.Entities;
-using DapperMvcApp.Models.Services;
+using DapperMvcApp.Entities;
+using DapperMvcApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using DapperMvcApp.Models;
 using System.Collections.Generic;
 using System.Linq;
+using DapperMvcApp.ViewModels;
 
 namespace DapperMvcApp.Controllers
 {

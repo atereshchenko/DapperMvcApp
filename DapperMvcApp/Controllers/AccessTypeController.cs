@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using DapperMvcApp.Models.Services;
-using DapperMvcApp.Models.Entities;
+using DapperMvcApp.Services;
+using DapperMvcApp.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 

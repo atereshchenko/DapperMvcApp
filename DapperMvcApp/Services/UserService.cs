@@ -4,10 +4,10 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using DapperMvcApp.Models.Entities;
+using DapperMvcApp.Entities;
 using System;
 
-namespace DapperMvcApp.Models.Services
+namespace DapperMvcApp.Services
 {
     public interface IUserRepository
     {

@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using DapperMvcApp.Models.Entities;
+using DapperMvcApp.Entities;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DapperMvcApp.Models.Services
+namespace DapperMvcApp.Services
 {
     public interface IRoleRepository
     {

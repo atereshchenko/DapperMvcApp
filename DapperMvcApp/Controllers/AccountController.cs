@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using DapperMvcApp.Models.Services;
-using DapperMvcApp.Models.Entities;
+using DapperMvcApp.Services;
+using DapperMvcApp.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DapperMvcApp.Controllers
