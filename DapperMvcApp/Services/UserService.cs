@@ -15,7 +15,7 @@ namespace DapperMvcApp.Models.Services
         Task<User> Get(string email, string password);        
         Task<IEnumerable<User>> ToList();
         Task<IEnumerable<User>> RolesInUser();
-        Task<IEnumerable<Role>> RolesInUser(int id);
+        Task<IList<string>> RolesInUser(int id);
         Task<User> Create(string email, string password);
         Task<User> Create(User user);
         Task<User> Update(User user);
@@ -54,7 +54,7 @@ namespace DapperMvcApp.Models.Services
         {
             return await Task.Run(() => RoleInUser());
         }
-        public async Task<IEnumerable<Role>> RolesInUser(int id)
+        public async Task<IList<string>> RolesInUser(int id)
         {
             return await Task.Run(() => RoleInUser(id));
         }
@@ -180,16 +180,16 @@ namespace DapperMvcApp.Models.Services
                     }).ToList();
             }
         }
-        private List<Role> RoleInUser(int id)
+        private List<string> RoleInUser(int id)
         {
-            string query = "Select [Roles].* " +
+            string query = "Select [Roles].Name " +
                 "FROM [dbo].[Users] AS [Users] " +
                 "LEFT OUTER JOIN [dbo].[UserRoles] AS UserRoles ON [Users].Id = UserRoles.UserId " +
                 "LEFT OUTER JOIN [dbo].[Roles] AS [Roles] on UserRoles.RoleId = [Roles].Id " +
                 "Where [Users].Id = @Id;";
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                return db.Query<Role>(query, new { Id = id }).ToList();
+                return db.Query<string>(query, new { Id = id }).ToList();
             }
         }
         #endregion

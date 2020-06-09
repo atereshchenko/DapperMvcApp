@@ -87,7 +87,7 @@ namespace DapperMvcApp.Controllers
                 {
                     UserId = user.Id,
                     UserEmail = user.Email,
-                    UserRoles = userRoles, // Вот тут ошибка 
+                    UserRoles = userRoles, 
                     AllRoles = allRoles
                 };
                 return View(model);
