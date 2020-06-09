@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using DapperMvcApp.Models.Entities;
+using System;
 
 namespace DapperMvcApp.Models.Services
 {
@@ -19,7 +20,9 @@ namespace DapperMvcApp.Models.Services
         Task<User> Create(string email, string password);
         Task<User> Create(User user);
         Task<User> Update(User user);
-        Task<User> Delete(User user);        
+        Task<User> Delete(User user);
+        Task AddToRoles(User user, IEnumerable<string> addedRoles);
+        Task RemoveFromRoles(User user, IEnumerable<string> removedRoles);
     }
 
     public class UserRepository : IUserRepository
@@ -73,6 +76,14 @@ namespace DapperMvcApp.Models.Services
         public async Task<User> Delete(User user)
         {
             return await Task.Run(() => DeleteUser(user));
+        }
+        public async Task AddToRoles(User user, IEnumerable<string> addedRoles)
+        {
+            await Task.Run(() => AddToRole(user, addedRoles));
+        }
+        public async Task RemoveFromRoles(User user, IEnumerable<string> removedRoles)
+        {
+            await Task.Run(() => RemoveFromRole(user, removedRoles));
         }
         #endregion
 
@@ -190,6 +201,34 @@ namespace DapperMvcApp.Models.Services
             using (IDbConnection db = new SqlConnection(connectionString))
             {
                 return db.Query<string>(query, new { Id = id }).ToList();
+            }
+        }
+        private void AddToRole(User user, IEnumerable<string> addedRoles)
+        {
+            using (IDbConnection db = new SqlConnection(connectionString)) 
+            { 
+                foreach (var role in addedRoles)
+                {                
+                    string _selectRoleId = "SELECT Id FROM [dbo].[Roles] Where [Roles].[Name] = @Name;";
+                    int _roleId = db.Query<int>(_selectRoleId, new { Name = role }).FirstOrDefault();
+                    
+                    string _insertRole = "INSERT INTO [dbo].[UserRoles] ([UserId],[RoleId]) VALUES (@UserId,@RoleId);";
+                    db.Query<UserRole>(_insertRole, new { UserId = user.Id, RoleId = _roleId });                    
+                }
+            }
+        }        
+        private void RemoveFromRole(User user, IEnumerable<string> removedRoles)
+        {
+            using (IDbConnection db = new SqlConnection(connectionString))
+            {
+                foreach (var role in removedRoles)
+                {
+                    string _selectRoleId = "SELECT Id FROM [dbo].[Roles] Where [Roles].[Name] = @Name;";
+                    int _roleId = db.Query<int>(_selectRoleId, new { Name = role }).FirstOrDefault();
+
+                    string _deleteRole = "DELETE FROM [dbo].[UserRoles] WHERE UserId = @UserId AND RoleId = @RoleId;";
+                    db.Query<UserRole>(_deleteRole, new { UserId = user.Id, RoleId = _roleId });
+                }
             }
         }
         #endregion

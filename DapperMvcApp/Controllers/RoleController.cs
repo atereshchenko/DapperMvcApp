@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using DapperMvcApp.Models;
-
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DapperMvcApp.Controllers
 {
@@ -91,6 +91,32 @@ namespace DapperMvcApp.Controllers
                     AllRoles = allRoles
                 };
                 return View(model);
+            }
+            return NotFound();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Change(string userId, List<string> roles)
+        {
+            int _id = int.Parse(userId);
+            User user = await _user.FindById(_id);
+            if (user != null)
+            {
+                // получем список ролей пользователя
+                var userRoles = await _user.RolesInUser(user.Id);
+                // получаем все роли
+                var allRoles = await _role.ToListRole();
+                // получаем список ролей, которые были добавлены
+                var addedRoles = roles.Except(userRoles);
+                // получаем роли, которые были удалены
+                var removedRoles = userRoles.Except(roles);
+
+                await _user.AddToRoles(user, addedRoles);
+                await _user.RemoveFromRoles(user, removedRoles);
+
+                //return RedirectToAction("Change");
+                return RedirectToAction("Change", "Role", new { @userid = userId });
             }
             return NotFound();
         }
