@@ -10,7 +10,6 @@ CREATE TABLE [dbo].[AccessTypes](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
 
 INSERT INTO [dbo].[AccessTypes] ([Title],[Read],[Write],[Delete]) VALUES('Full', 'true','true','true')
 INSERT INTO [dbo].[AccessTypes] ([Title],[Read],[Write],[Delete]) VALUES('Change', 'true','true','false')
@@ -29,9 +28,10 @@ CREATE TABLE [dbo].[Users](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
 
-INSERT INTO [dbo].[Users] ([Name], [Email], [Password], [Age]) VALUES ('Test User', 'test@mail.ru', 'A1aaaaaa', 10)
+INSERT INTO [dbo].[Users] ([Name], [Email], [Password], [Age]) VALUES ('Admin', 'admin@mail.com', 'A1aaaaaa', 10)
+INSERT INTO [dbo].[Users] ([Name], [Email], [Password], [Age]) VALUES ('User1', 'user1@mail.com', 'A1aaaaaa', 10)
+INSERT INTO [dbo].[Users] ([Name], [Email], [Password], [Age]) VALUES ('User2', 'user2@mail.com', 'A1aaaaaa', 10)
 
 --CREATE TABLE [dbo].[Roles]
 CREATE TABLE [dbo].[Roles](
@@ -42,7 +42,6 @@ CREATE TABLE [dbo].[Roles](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
 
 INSERT INTO [dbo].[Roles] ([Name]) VALUES ('Administrators')
 INSERT INTO [dbo].[Roles] ([Name]) VALUES ('Moderators')
@@ -50,8 +49,8 @@ INSERT INTO [dbo].[Roles] ([Name]) VALUES ('Users')
 
 --CREATE TABLE [dbo].[UserRoles]
 CREATE TABLE [dbo].[UserRoles](
-	[UserId] int NOT NULL,
-	[RoleId] int NOT NULL,
+	[UserId] [int] NOT NULL,
+	[RoleId] [int] NOT NULL,
  CONSTRAINT [PK_UserRoles] PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC,
@@ -75,6 +74,11 @@ GO
 
 ALTER TABLE [dbo].[UserRoles] CHECK CONSTRAINT [FK_UserRoles_Users_UserId]
 GO
+
+INSERT INTO [dbo].[UserRoles]([UserId],[RoleId]) VALUES (1,1)
+INSERT INTO [dbo].[UserRoles]([UserId],[RoleId]) VALUES (2,2)
+INSERT INTO [dbo].[UserRoles]([UserId],[RoleId]) VALUES (2,3)
+INSERT INTO [dbo].[UserRoles]([UserId],[RoleId]) VALUES (3,3)
 
 --Запрос Пользователи в роли (многие-ко-многим)
 SELECT [Roles].*, [Users].* 

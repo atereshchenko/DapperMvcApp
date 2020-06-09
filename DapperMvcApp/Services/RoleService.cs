@@ -13,6 +13,7 @@ namespace DapperMvcApp.Models.Services
     {
         Task<Role> FindById(int id);
         Task<IEnumerable<Role>> ToList();
+        Task<List<Role>> ToListRole();
         Task<IEnumerable<Role>> UsersInRole();
         Task<IEnumerable<Role>> UsersInRole(int id);
         Task<Role> Create(Role _role);
@@ -36,11 +37,14 @@ namespace DapperMvcApp.Models.Services
         {            
             return await Task.Run(() => GetListRoles());
         }
+        public async Task<List<Role>> ToListRole()
+        {
+            return await Task.Run(() => GetListRoles());
+        }
         public async Task<IEnumerable<Role>> UsersInRole()
         {
             return await Task.Run(() => UserInRole());
         }
-
         public async Task<IEnumerable<Role>> UsersInRole(int id)
         {
             return await Task.Run(() => UserInRole(id));
